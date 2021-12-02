@@ -21,6 +21,7 @@ export default class Poll extends RunestoneBase {
         if ($(this.origElem).is("[data-comment]")) {
             this.comment = true;
         }
+        this.multipleAnswers = $(this.origElem).data("multipleanswers");
         this.resultsViewer = $(orig).data("results");
         this.getQuestionText();
         this.getOptionText(); //populates optionList
@@ -72,21 +73,26 @@ export default class Poll extends RunestoneBase {
             onsubmit: "return false;",
         });
         this.pollForm.appendChild(document.createElement("br"));
+        
+        var type = "";
+        if (this.multipleAnswers) type = "checkbox";
+        else type = "radio"; 
+        
         for (var i = 0; i < this.optionList.length; i++) {
-            var radio = document.createElement("input");
+            var option = document.createElement("input");
             var tmpid = _this.divid + "_opt_" + i;
-            $(radio).attr({
+            $(option).attr({
                 id: tmpid,
                 name: this.divid + "_group1",
-                type: "radio",
+                type: type,
                 value: i,
             });
-            $(radio).click(this.submitPoll.bind(this));
+            $(option).click(this.submitPoll.bind(this));
             var label = document.createElement("label");
             $(label).attr("for", tmpid);
             $(label).text(this.optionList[i]);
-            this.pollForm.appendChild(radio);
-            this.optsArray.push(radio);
+            this.pollForm.appendChild(option);
+            this.optsArray.push(option);
             this.pollForm.appendChild(label);
             this.pollForm.appendChild(document.createElement("br"));
         }

@@ -31,7 +31,7 @@ def setup(app):
 
 TEMPLATE_START = """
 <div class="runestone">
-<ul data-component="poll" id=%(divid)s %(comment)s class='%(divclass)s' data-results='%(results)s' data-question_label="%(question_label)s" %(optional)s>
+<ul data-component="poll" id=%(divid)s %(comment)s class='%(divclass)s' data-multipleanswers="%(multipleAnswers)s" data-results='%(results)s' data-question_label="%(question_label)s" %(optional)s>
 %(question)s
 """
 
@@ -115,6 +115,7 @@ config values (conf.py):
         {
             "scale": directives.positive_int,
             "allowcomment": directives.flag,
+            "multiple_answers": directives.flag,
             "option_1": directives.unchanged,
             "option_2": directives.unchanged,
             "option_3": directives.unchanged,
@@ -157,6 +158,10 @@ config values (conf.py):
             self.options["comment"] = "data-comment"
         else:
             self.options["comment"] = ""
+        if "multiple_answers" in self.options:
+            self.options["multipleAnswers"] = "true"
+        else:
+            self.options["multipleAnswers"] = "false"
 
         if not "results" in self.options:
             self.options["results"] = "instructor"
